@@ -45,6 +45,10 @@
 		'easing' : '',
 		'easing':'swing', //The easing equation
 		'loadLastTab':false, //When tabs loaded, scroll to the last tab - default is the first tab
+		'navFirstIconClass' : 'ui-icon-seek-first',
+		'navLastIconClass' : 'ui-icon-seek-end',
+		'navNextIconClass' : 'ui-icon-seek-next',
+		'navPrevIconClass' : 'ui-icon-seek-prev',
 		'onTabScroll' : function(){},
 		'resizable' : false, //Alow resizing the tabs container
 		'resizeHandles' : 'e,s,se', //Resizable in North, East and NorthEast directions
@@ -70,10 +74,10 @@ $.fn.scrollabletabs = function(options)
 			//Navigation
 			if(!o.hideDefaultArrows)
 			{
-				var	$navPrev = $('<li class="stNavPrevArrow ui-state-active" title="Previous"><span class="ui-icon ui-icon-seek-prev">Previous tab</span></li>'),
-					$navNext = $('<li class="stNavNextArrow ui-state-active" title="Next"><span class="ui-icon ui-icon-seek-next">Next tab</span></li>'),
-					$navFirst = o.showFirstLastArrows ? $('<li class="stNavFirstArrow ui-state-active" title="First"><span class="ui-icon ui-icon-seek-first">First tab</span></li>') : $(),
-					$navLast =  o.showFirstLastArrows ? $('<li class="stNavLastArrow ui-state-active" title="Last"><span class="ui-icon ui-icon-seek-end">Last tab</span></li>') : $();
+				var	$navPrev = $('<li class="stNavPrevArrow ui-state-active" title="Previous"><span class="ui-icon ' + o.navPrevIconClass + '">Previous tab</span></li>'),
+					$navNext = $('<li class="stNavNextArrow ui-state-active" title="Next"><span class="ui-icon ' + o.navNextIconClass + '">Next tab</span></li>'),
+					$navFirst = o.showFirstLastArrows ? $('<li class="stNavFirstArrow ui-state-active" title="First"><span class="ui-icon ' + o.navFirstIconClass + '">First tab</span></li>') : $(),
+					$navLast = o.showFirstLastArrows ? $('<li class="stNavLastArrow ui-state-active" title="Last"><span class="ui-icon ' + o.navEndIconClass + '">Last tab</span></li>') : $();
 				//Append elements to the container
 				$arrowsNav.append($navPrev,$navFirst,$navLast,$navNext);
 				var	$navLis = $arrowsNav.find('li').hover(function(){ $(this).toggleClass('ui-state-active').toggleClass('ui-state-hover'); });
