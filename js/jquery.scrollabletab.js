@@ -52,7 +52,9 @@
 		'onTabScroll' : function(){},
 		'resizable' : false, //Alow resizing the tabs container
 		'resizeHandles' : 'e,s,se', //Resizable in North, East and NorthEast directions
-		'scrollSpeed' : 500, //The speed in which the tabs will animate/scroll
+		'responsiveLayout': true, //Auto resize tabs content, add navigation if needed after window resized
+		'responsiveLayoutInterval': 125, //Auto resize reponse interval. For slow or rich clients, set to higher value
+		'scrollSpeed': 500, //The speed in which the tabs will animate/scroll
 		'selectTabOnAdd' : true,
 		'selectTabAfterScroll' : true,
 		'showFirstLastArrows' : true,
@@ -70,7 +72,8 @@ $.fn.scrollabletabs = function(options)
 			$lis = $ul.find('li'),
 			$arrowsNav = $('<ol class="stNavMain" />'),
 			$curSelectedTab = $ul.find('.ui-tabs-selected').addClass('stCurrentTab'); //We will use our own css class to detect a selected tab because we might want to scroll without tab being selected
-			
+			$responsiveTimeout = undefined;
+
 			//Navigation
 			if(!o.hideDefaultArrows)
 			{
@@ -187,6 +190,30 @@ $.fn.scrollabletabs = function(options)
 					$lis.css('margin-left',m)
 				}*/
 			});
+		    // Responsive layout
+			if(o.responsiveLayout) {
+				$(window).bind( "resize", function (event) {
+					// create time out with given interval, destroy on going one if multiple events fired
+					if($responsiveTimeout) {
+						window.clearTimeout($responsiveTimeout);
+					}
+
+					$responsiveTimeout = window.setTimeout(function () {
+						var activeLi = $ul.children('.ui-state-active');
+						//See if nav needed
+						_showNavsIfNeeded();
+						//Adjust the left position of all tabs
+						_adjustLeftPosition();
+						//Scroll if needed
+						if (_isHiddenOn('n', activeLi)) {
+							_animateTabTo('n', activeLi, null, event)
+						}
+						else if (_isHiddenOn('p', activeLi)) {
+							_animateTabTo('p', activeLi, null, event)
+						}
+					}, o.responsiveLayoutInterval);
+				});
+			}
 		}
 		
 		//Check if navigation need than show otherwise hide it
