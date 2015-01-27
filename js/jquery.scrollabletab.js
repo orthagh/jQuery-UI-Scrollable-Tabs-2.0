@@ -156,7 +156,6 @@ $.fn.scrollabletabs = function(options)
 				//Check if select on add
 				if(o.selectTabOnAdd)
 				{
-					d($lis.index($thisLi));
 					$(this).tabs('select',$lis.index($thisLi));
 				}
 			})
@@ -292,7 +291,6 @@ $.fn.scrollabletabs = function(options)
 			{
 				margin = _pullMargin($tab);
 			}
-			//d($tab);
 			
 			$lis
 				//.stop(false, true) //.stop( [ clearQueue ], [ jumpToEnd ] ) - this line is not working properly 
@@ -307,9 +305,7 @@ $.fn.scrollabletabs = function(options)
 				//Update current tab
 				if(tabIndex>-1) //Means this method is called from showTab event so tab css is already updated
 				{
-					//d($tab);
 					_updateCurrentTab($tab);
-					//d($curSelectedTab);
 				}
 			}
 			
@@ -346,8 +342,6 @@ $.fn.scrollabletabs = function(options)
 				if(!o.selectTabAfterScroll)
 				{
 					$curSelectedTab.nextAll('li').each(function(){
-						//d($(this));
-						//d(_isHiddenOn('n', $(this)));
 						if(_isHiddenOn('n', $(this)))
 						{
 							$nxtLi = $(this);
@@ -364,7 +358,6 @@ $.fn.scrollabletabs = function(options)
 				//check if there is no next tab
 				if(!$nxtLi.length)
 				{
-					d('You are on last tab, no next tab found.');
 					return false;
 				}
 				
@@ -412,7 +405,6 @@ $.fn.scrollabletabs = function(options)
 					
 				if(!$prvLi.length)
 				{
-					d('There is no previous tab. NO PREV TAB');
 					return false;
 				}
 
@@ -440,7 +432,6 @@ $.fn.scrollabletabs = function(options)
 				//check if li selected is the first tab already
 				if($lis.index($curSelectedTab)==0)
 				{
-					console.log('You are on first tab already');
 					return false;
 				}
 				_animateTabTo('f', $lis.first(), 0, e);
@@ -456,7 +447,6 @@ $.fn.scrollabletabs = function(options)
 				var $lstLi = $curSelectedTab.next('li');
 				if(!$lstLi.length)
 				{
-					d('You are already on the last tab. there is no more last tab.');
 					return false;
 				}
 				//Get index of prev element
@@ -528,7 +518,6 @@ $.fn.scrollabletabs = function(options)
 				if($lis.lenght==1) return;
 				var $thisPrev = $li.prev('li') || $lis.first(),
 					newLeft = parseFloat($thisPrev.css('left'));
-					//d(newLeft);
 					newLeft = isNaN(newLeft) ? 0 : newLeft;
 					newLeft = newLeft + $thisPrev.outerWidth(true)+4;
 					//Assign
@@ -552,7 +541,6 @@ $.fn.scrollabletabs = function(options)
 			$ul.find('li:not(:first)').each(function(){
 				//Apply the css
 				$(this).css('margin-left',0)[o.animateTabs ? 'animate' : 'css']({'left': tw += $(this).prev('li').outerWidth(true) })
-				//d($(this));
 			});
 			
 			$lis.css('margin-left',leftMargin);
@@ -568,7 +556,6 @@ $.fn.scrollabletabs = function(options)
 			});
 			
 			var navWidth = $arrowsNav.css('visibility')=='visible' ? _getNavPairWidth() : 0;
-			//d(navWidth);
 			return w + navWidth;
 		}
 		
