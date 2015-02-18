@@ -265,7 +265,16 @@ TODO:
                     margin = _pullMargin($tab);
                 }
 
-                $lis.stop(true, true).animate({ 'margin-left': margin }, o.scrollSpeed, o.easing); // stop and finish all bind animation effects
+                if (o.animateTabs) {
+                    // with animation
+
+                    // stop and finish all bind animation effects, then animate
+                    $lis.stop(true, true).animate({ 'margin-left': margin }, o.scrollSpeed, o.easing);
+                } else {
+                    // without animation
+                    $lis.css('margin-left', margin);
+                }
+
                 _adjustLeftPosition();
 
                 if (o.selectTabAfterScroll && tabIndex !== null) {
