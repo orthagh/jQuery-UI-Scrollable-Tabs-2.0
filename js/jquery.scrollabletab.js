@@ -59,6 +59,7 @@ TODO:
         'showFirstLastArrows': true,
         'hideDefaultArrows': false,
         'nextPrevOutward': false,
+        'tabsSeparation': 0, // Separation of the tabs in pixels
         'wrapperCssClass': ''
     }
 
@@ -228,7 +229,7 @@ TODO:
                 //If no tab is provided than take the current
                 $tab = $tab || $curSelectedTab;
                 if (side == 'n') {
-                    var rightPos = $tab[0].offsetLeft + $tab.outerWidth(true) + 5;
+                    var rightPos = $tab[0].offsetLeft + $tab.outerWidth(true) + o.tabsSeparation;
                     return (rightPos > ($ul.outerWidth() - _getNavPairWidth()));
                 }
                 else//side='p'
@@ -461,7 +462,7 @@ TODO:
                     var $thisPrev = $li.prev('li') || $lis.first(),
                         newLeft = parseFloat($thisPrev.css('left'));
                     newLeft = isNaN(newLeft) ? 0 : newLeft;
-                    newLeft = newLeft + $thisPrev.outerWidth(true) + 4;
+                    newLeft = newLeft + $thisPrev.outerWidth(true) + o.tabsSeparation;
                     //Assign
                     $li.css({
                         'left': newLeft,
@@ -472,7 +473,7 @@ TODO:
 
                 //Add css class n take its left value to start the total width of tabs
                 var pairWidth = _getNavPairWidth(),
-                    leftPush = pairWidth == 0 ? 3 : pairWidth + 2;
+                    leftPush = pairWidth == 0 ? 3 : pairWidth + 2; // TODO: check numeric constants
                 $lis.first().addClass('stFirstTab').css({ 'left': leftPush, 'margin-left': 0 });
 
                 var tw = leftPush;
@@ -482,7 +483,7 @@ TODO:
 
                 $ul.find('li:not(:first)').each(function () {
                     //Apply the css
-                    $(this).css('margin-left', 0)[o.animateTabs ? 'animate' : 'css']({ 'left': tw += $(this).prev('li').outerWidth(true) })
+                    $(this).css('margin-left', 0)[o.animateTabs ? 'animate' : 'css']({ 'left': tw += $(this).prev('li').outerWidth(true) + o.tabsSeparation })
                 });
 
                 $lis.css('margin-left', leftMargin);
