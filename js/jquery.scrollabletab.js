@@ -70,7 +70,8 @@ TODO:
                 $ul = $tabs.find('ul.ui-tabs-nav:first'),
                 $lis = $ul.find('li'),
                 $arrowsNav = $('<ol class="stNavMain" />'),
-                $curSelectedTab = $ul.find('.ui-tabs-selected').addClass('stCurrentTab'), //We will use our own css class to detect a selected tab because we might want to scroll without tab being selected
+                // supports both depreceated and new classes for jquery ui tabs
+                $curSelectedTab = $ul.find('.ui-tabs-selected,.ui-tabs-active').first().addClass('stCurrentTab'), //We will use our own css class to detect a selected tab because we might want to scroll without tab being selected
                 $responsiveTimeout = undefined;
 
             //Navigation
