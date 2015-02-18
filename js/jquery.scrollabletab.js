@@ -275,8 +275,6 @@ TODO:
                     $lis.css('margin-left', margin);
                 }
 
-                _adjustLeftPosition();
-
                 if (o.selectTabAfterScroll && tabIndex !== null) {
                     $tabs.tabs('select', tabIndex);
                 }
@@ -490,7 +488,7 @@ TODO:
 
                 $ul.find('li:not(:first)').each(function () {
                     //Apply the css
-                    $(this).css('margin-left', 0)[o.animateTabs ? 'animate' : 'css']({ 'left': tw += $(this).prev('li').outerWidth(true) + o.tabsSeparation })
+                    $(this).stop(true, true).css('margin-left', 0)[o.animateTabs ? 'animate' : 'css']({ 'left': tw += $(this).prev('li').outerWidth(true) + o.tabsSeparation })
                 });
 
                 $lis.css('margin-left', leftMargin);
