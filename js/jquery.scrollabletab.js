@@ -186,17 +186,16 @@ TODO:
                         }
 
                         $responsiveTimeout = window.setTimeout(function () {
-                            var activeLi = $ul.children('.ui-state-active');
                             //See if nav needed
                             _showNavsIfNeeded();
                             //Adjust the left position of all tabs
                             _adjustLeftPosition();
                             //Scroll if needed
-                            if (_isHiddenOn('n', activeLi)) {
-                                _animateTabTo('n', activeLi, null, event)
+                            if (_isHiddenOn('n', $curSelectedTab)) {
+                                _animateTabTo('n', $curSelectedTab, null, event)
                             }
-                            else if (_isHiddenOn('p', activeLi)) {
-                                _animateTabTo('p', activeLi, null, event)
+                            else if (_isHiddenOn('p', $curSelectedTab)) {
+                                _animateTabTo('p', $curSelectedTab, null, event)
                             }
                         }, o.responsiveLayoutInterval);
                     });
@@ -274,7 +273,7 @@ TODO:
                 }
                 else {
                     //Update current tab
-                    if (tabIndex > -1) //Means this method is called from showTab event so tab css is already updated
+                    if (tabIndex > -1 && o.selectTabAfterScroll) //Means this method is called from showTab event so tab css is already updated
                     {
                         _updateCurrentTab($tab);
                     }
