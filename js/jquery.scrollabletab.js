@@ -265,9 +265,8 @@ TODO:
                     margin = _pullMargin($tab);
                 }
 
-                $lis
-                    //.stop(false, true) //.stop( [ clearQueue ], [ jumpToEnd ] ) - this line is not working properly
-                    .animate({ 'margin-left': margin }, o.scrollSpeed, o.easing);
+                $lis.stop(true, true).animate({ 'margin-left': margin }, o.scrollSpeed, o.easing); // stop and finish all bind animation effects
+                _adjustLeftPosition();
 
                 if (o.selectTabAfterScroll && tabIndex !== null) {
                     $tabs.tabs('select', tabIndex);
