@@ -495,11 +495,16 @@ TODO:
             }
 
             function _liWidth($tab) {
-                var w = 0,
-                list = $tab ? $tab.prevAll('li').andSelf() : $lis;
+                var w = 0, margin,
+                    list = $tab ? $tab.prevAll('li').andSelf() : $lis;
+
                 list.each(function () {
-                    w += $(this).outerWidth() + parseInt($(this).css('margin-right'), 10); //not outerWidth(true) because margin-left is changed in previous call so better take right margin which doesn't change in this plugin
+                    margin = parseInt($(this).css('margin-right'), 10); //not outerWidth(true) because margin-left is changed in previous call so better take right margin which doesn't change in this plugin
+                    w += $(this).outerWidth() + margin;
                 });
+
+                // remove the last margin and border
+                w -= margin + 2 * parseInt(list.first().css('border-width'), 10);
 
                 var navWidth = $arrowsNav.css('visibility') == 'visible' ? _getNavPairWidth() : 0;
                 return w + navWidth;
