@@ -230,8 +230,9 @@ TODO:
                 //If no tab is provided than take the current
                 $tab = $tab || $curSelectedTab;
                 if (side == 'n') {
-                    var rightPos = $tab[0].offsetLeft + $tab.outerWidth(true) + o.tabsSeparation;
-                    return (rightPos > ($ul.outerWidth() - _getNavPairWidth()));
+                    var rightPos = $tab[0].offsetLeft + $tab.outerWidth(),
+                        innerWidth = $ul.outerWidth() - _getNavPairWidth();
+                    return (rightPos > innerWidth);
                 }
                 else//side='p'
                 {
