@@ -1,9 +1,9 @@
 /**
  * jQueryUI.ScrollableTabs - Scrolling multiple tabs.
  * @copyright jQueryUI.scrollableTabs is licensed under the WTFPL (so feel free to relicense as needed).
- * Date: 16/05/2011
+ * Date: 18/02/2015
  * @author Aamir Afridi - aamirafridi(at)gmail(dot)com | http://www.aamirafridi.com
- * @version 2.0
+ * @version 2.1
  * Examples:
  *    $('#example_1').tabs({paging: true});
  *    $('#example_2').tabs({paging: {options} });
