@@ -144,7 +144,7 @@ TODO:
                     //See if nav needed
                     _showNavsIfNeeded();
                     //Adjust the left position of all tabs
-                    _adjustLeftPosition($thisLi);
+                    _adjustLeftPosition();
                     //Check if select on add
                     if (o.selectTabOnAdd) {
                         $(this).tabs('select', $lis.index($thisLi));
