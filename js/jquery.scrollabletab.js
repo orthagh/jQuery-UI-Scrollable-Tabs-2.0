@@ -306,9 +306,9 @@ TODO:
                 //Handle next tab
                 $navNext.click(function (e) {
                     var $nxtLi = $();
-                    //First check if user do not want to select tab on Next than we have to find the next hidden (out of viewport) tab so we can scroll to it
+                    //First check if user do not want to select tab on Next than we have to find the first hidden (out of viewport) one
                     if (!o.selectTabAfterScroll) {
-                        $curSelectedTab.nextAll('li').each(function () {
+                        $lis.each(function () {
                             if (_isHiddenOn('n', $(this))) {
                                 $nxtLi = $(this);
                                 return false;
@@ -318,7 +318,6 @@ TODO:
                     else {
                         $nxtLi = $curSelectedTab.next('li');
                     }
-                    //return;
 
                     //check if there is no next tab
                     if (!$nxtLi.length) {
