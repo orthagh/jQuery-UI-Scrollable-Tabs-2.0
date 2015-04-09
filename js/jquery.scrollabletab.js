@@ -488,6 +488,11 @@ TODO:
                 //Take left margin if any
                 var leftMargin = parseFloat($lis.last().prev('li').css('margin-left'));
 
+                //Detect if all elements fits in to page (e.g. after page size changed)
+                if (_liWidth() <= $ul.width()) {
+                    leftMargin = 0;
+                }
+
                 $lis.stop(true, true).css('margin-left', 0);
                 $ul.find('li:not(:first)').each(function () {
                     //Apply the css
