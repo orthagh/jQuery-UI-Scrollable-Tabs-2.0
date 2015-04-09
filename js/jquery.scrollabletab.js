@@ -488,9 +488,10 @@ TODO:
                 //Take left margin if any
                 var leftMargin = parseFloat($lis.last().prev('li').css('margin-left'));
 
+                $lis.stop(true, true).css('margin-left', 0);
                 $ul.find('li:not(:first)').each(function () {
                     //Apply the css
-                    $(this).stop(true, true).css('margin-left', 0)[o.animateTabs ? 'animate' : 'css']({ 'left': tw += $(this).prev('li').outerWidth(true) + o.tabsSeparation })
+                    $(this).stop(true, true)[o.animateTabs ? 'animate' : 'css']({ 'left': tw += $(this).prev('li').outerWidth(true) + o.tabsSeparation })
                 });
 
                 $lis.css('margin-left', leftMargin);
