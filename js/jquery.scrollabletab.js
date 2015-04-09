@@ -123,8 +123,8 @@ TODO:
                 //Add events to the navigation buttons
                 _addNavEvents();
                 //If tab is selected manually by user than also change the css class
-                $tabs.bind("tabsshow", function (event, ui) {
-                    _updateCurrentTab($(ui.tab).parents('li'));
+                $tabs.bind("tabsshow tabsactivate", function (event, ui) { // support for new and deprecated version
+                    _updateCurrentTab(ui.tab ? $(ui.tab).parents('li') : ui.newTab); // support for new and deprecated version
                     //Scroll if needed
                     if (_isHiddenOn('n')) {
                         _animateTabTo('n', null, null, event)
@@ -134,7 +134,7 @@ TODO:
                     }
                     //else do nothing, tab is visible so no need to scroll tab
                 })
-                .bind("tabsadd", function (event, ui) {
+                .bind("tabsadd", function (event, ui) { // Deprecated in 1.11+
                     var $thisLi = $(ui.tab).parents('li');
                     //Update li list
                     $lis = $ul.find('li');
@@ -151,7 +151,7 @@ TODO:
                         $(this).tabs('select', $lis.index($thisLi));
                     }
                 })
-                .bind("tabsremove", function (event, ui) {
+                .bind("tabsremove", function (event, ui) { // Deprecated in 1.11+
                     //var $thisLi = $(ui.tab).parents('li');
                     //Update li list
                     $lis = $ul.find('li');
