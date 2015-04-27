@@ -172,7 +172,7 @@ TODO:
                     _adjustLeftPosition();
                     //Check if select on add
                     if (o.selectTabOnAdd) {
-                        $(this).tabs('select', $lis.index($thisLi));
+                        $(this).tabs("option", "active", $lis.index($thisLi));
                     }
                 })
                 .bind("tabsremove", function (event, ui) { // Deprecated in 1.11+
@@ -256,7 +256,7 @@ TODO:
                         .removeClass('ui-state-active')
                         .find('a')
                             .click(function() {
-                                $tabs.tabs('select', $(this).parent().index());
+                                $tabs.tabs("option", "active", $(this).parent().index());
                                 $listOfTabs.toggle();
                             })
                         .end()
@@ -322,7 +322,7 @@ TODO:
                 }
 
                 if (o.selectTabAfterScroll && tabIndex !== null) {
-                    $tabs.tabs('select', tabIndex);
+                    $tabs.tabs("option", "active", tabIndex);
                 }
                 else {
                     //Update current tab
@@ -444,7 +444,7 @@ TODO:
                     _animateTabTo('n', $nxtLi, indexNextTab, e);
                 }
                 else {
-                    $tabs.tabs('select', indexNextTab);
+                    $tabs.tabs("option", "active", indexNextTab);
                 }
             }
 
@@ -480,7 +480,7 @@ TODO:
                     _animateTabTo('p', $prvLi, indexPrevTab, e);
                 }
                 else {
-                    $tabs.tabs('select', indexPrevTab);
+                    $tabs.tabs("option", "active", indexPrevTab);
                 }
                 return false;
             }
