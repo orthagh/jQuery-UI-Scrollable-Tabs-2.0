@@ -255,7 +255,8 @@ TODO:
                         .clone()
                         .removeClass('ui-state-active')
                         .find('a')
-                            .click(function() {
+                            .click(function(e) {
+                                e.preventDefault();
                                 $tabs.tabs("option", "active", $(this).parent().index());
                                 $listOfTabs.toggle();
                             })
