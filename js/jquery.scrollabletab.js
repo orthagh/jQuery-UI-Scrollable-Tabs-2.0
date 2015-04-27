@@ -11,21 +11,21 @@
 
 /*
 TODO:
-   1.	Re-position tabs when user add or remove a tab. at the moment its working fine but there is something wrong when you keep removing and adding tabs.
+   1. Re-position tabs when user add or remove a tab. at the moment its working fine but there is something wrong when you keep removing and adding tabs.
        When user close the last tab, the tabs should navigate and adjust itself to fill the empty space at the end. When it comes to last tab, user can still close it using jQuery UI tab's method
        so in that case there might be a problem if user want to add a new tab.
        When user adds a tab, the tab should adjust its position at the end and depending on option, should navigate to it the new tab or not.
-   2.	I LOVE THIS FEATURE but can leave this till end. Just like chrome if user want to close a tab, soon user clicks the close button, the next tab should navigate and its close button
+   2.   I LOVE THIS FEATURE but can leave this till end. Just like chrome if user want to close a tab, soon user clicks the close button, the next tab should navigate and its close button
        should come under the pointer so user can keep clicking to close the tabs. (open many tabs in chrome and try closing them without moving ur mouse pointer)
-   3.	I tried to make sure that all the calculations should be done without any hard coding css values so make sure the plugin works even if user use larger font sizes for tabs and its content
-   4.	Test on other browsers, including IE/6
-   5.	Improve the performance and speed but don't care too much as we shouldn't change the markup as in previous version, i did for this plugin
-   6.	I arrange the plugin by setting their css left position and than scroll them by animating its margin-left in negative(next/last) or positive(prev/first).
+   3.   I tried to make sure that all the calculations should be done without any hard coding css values so make sure the plugin works even if user use larger font sizes for tabs and its content
+   4.   Test on other browsers, including IE/6
+   5.   Improve the performance and speed but don't care too much as we shouldn't change the markup as in previous version, i did for this plugin
+   6.   I arrange the plugin by setting their css left position and than scroll them by animating its margin-left in negative(next/last) or positive(prev/first).
        I used css left because tabs cannot be adjusted if we use float:left in one line so i used the overflow:hidden for the UL and let them positioned absolutely inside.
-   7.	Think of more callbacks if user wants like I have just one onTabScroll (not tested yet :P )
-   8.	Exponse _animateTo.. method as $tabs.scrollToTab(tabIndex,callback etc)
-   9.	Test if user want to load with ajax content
-   10.	These features are OSUM: http://stackoverflow.com/questions/2475725/jquery-ui-tabs-customization-for-many-tabs BY Tauren
+   7.   Think of more callbacks if user wants like I have just one onTabScroll (not tested yet :P )
+   8.   Exponse _animateTo.. method as $tabs.scrollToTab(tabIndex,callback etc)
+   9.   Test if user want to load with ajax content
+   10.  These features are OSUM: http://stackoverflow.com/questions/2475725/jquery-ui-tabs-customization-for-many-tabs BY Tauren
    11. If there is a problem with IE8 as I discovered in previous version, tabs will disappear when user add a tab. try alltabs.hide().show() should work
    12. http://jsfiddle.net/BYS2U/6/ (see last lines on this file) basically should be able to do something like $('#mytabs').tabs({...,scrollable:{opts},....})
    13. All feature request that are made on http://aamirafridi.com/jquery/jquery-scrollable-tabs comments
@@ -70,6 +70,7 @@ TODO:
                 $ul = $tabs.find('ul.ui-tabs-nav:first'),
                 $lis = $ul.find('li'),
                 $arrowsNav = $('<ol class="stNavMain" />'),
+                
                 // supports both depreceated and new classes for jquery ui tabs
                 $curSelectedTab = $ul.find('.ui-tabs-selected,.ui-tabs-active').first().addClass('stCurrentTab'), //We will use our own css class to detect a selected tab because we might want to scroll without tab being selected
                 $responsiveTimeout = undefined;
@@ -77,9 +78,9 @@ TODO:
             //Navigation
             if (!o.hideDefaultArrows) {
                 var $navPrev = $('<li class="stNavPrevArrow ui-state-active" title="Previous"><span class="ui-icon ' + o.navPrevIconClass + '">Previous tab</span></li>'),
-					$navNext = $('<li class="stNavNextArrow ui-state-active" title="Next"><span class="ui-icon ' + o.navNextIconClass + '">Next tab</span></li>'),
-					$navFirst = o.showFirstLastArrows ? $('<li class="stNavFirstArrow ui-state-active" title="First"><span class="ui-icon ' + o.navFirstIconClass + '">First tab</span></li>') : $(),
-					$navLast = o.showFirstLastArrows ? $('<li class="stNavLastArrow ui-state-active" title="Last"><span class="ui-icon ' + o.navEndIconClass + '">Last tab</span></li>') : $();
+                $navNext = $('<li class="stNavNextArrow ui-state-active" title="Next"><span class="ui-icon ' + o.navNextIconClass + '">Next tab</span></li>'),
+                $navFirst = o.showFirstLastArrows ? $('<li class="stNavFirstArrow ui-state-active" title="First"><span class="ui-icon ' + o.navFirstIconClass + '">First tab</span></li>') : $(),
+                $navLast = o.showFirstLastArrows ? $('<li class="stNavLastArrow ui-state-active" title="Last"><span class="ui-icon ' + o.navEndIconClass + '">Last tab</span></li>') : $();
                 //Append elements to the container
                 $arrowsNav.append($navPrev, $navFirst, $navLast, $navNext);
                 var $navLis = $arrowsNav.find('li').hover(function () { $(this).toggleClass('ui-state-active').toggleClass('ui-state-hover'); });
@@ -308,42 +309,11 @@ TODO:
             }
 
             function _addNavEvents() {
+                //Handle next tab
                 $navNext = $navNext ? $navNext : $();
                 $navNext = _addCustomerSelToCollection($navNext, 'Next');
-
-                //Handle next tab
                 $navNext.click(function (e) {
-                    var $nxtLi = $();
-                    //First check if user do not want to select tab on Next than we have to find the first hidden (out of viewport) one
-                    if (!o.selectTabAfterScroll) {
-                        $lis.each(function () {
-                            if (_isHiddenOn('n', $(this))) {
-                                $nxtLi = $(this);
-                                return false;
-                            }
-                        });
-                    }
-                    else {
-                        $nxtLi = $curSelectedTab.next('li');
-                    }
-
-                    //check if there is no next tab
-                    if (!$nxtLi.length) {
-                        return false;
-                    }
-
-                    //check if li next to selected is in view or not
-                    var isTabHidden = _isHiddenOn('n', $nxtLi);
-
-                    //get index of next element
-                    indexNextTab = $lis.index($nxtLi);
-
-                    if (isTabHidden) {
-                        _animateTabTo('n', $nxtLi, indexNextTab, e);
-                    }
-                    else {
-                        $tabs.tabs('select', indexNextTab);
-                    }
+                    _nextTab(e);
                 })
 
                 //Handle previous tab
@@ -351,40 +321,7 @@ TODO:
                 $navPrev = _addCustomerSelToCollection($navPrev, 'Prev');
 
                 $navPrev.click(function (e) {
-                    var $prvLi = $();
-
-                    //First check if user do not want to select tab on Prev than we have to find the prev hidden (out of viewport) tab so we can scroll to it
-                    if (!o.selectTabAfterScroll) {
-                        //Reverse the order of tabs list
-                        $($lis.get().reverse()).each(function () {
-                            if (_isHiddenOn('p', $(this))) {
-                                $prvLi = $(this);
-                                return false;
-                            }
-                        });
-                    }
-                    else {
-                        $prvLi = $curSelectedTab.prev('li');
-                    }
-                    //return;
-
-                    if (!$prvLi.length) {
-                        return false;
-                    }
-
-                    //check if li previous to selected is in view or not
-                    var isTabHidden = _isHiddenOn('p', $prvLi);
-
-                    //Get index of prev element
-                    var indexPrevTab = $lis.index($prvLi);
-
-                    if (isTabHidden) {
-                        _animateTabTo('p', $prvLi, indexPrevTab, e);
-                    }
-                    else {
-                        $tabs.tabs('select', indexPrevTab);
-                    }
-                    return false;
+                    _previousTab(e);
                 });
 
                 //Handle First tab
@@ -414,6 +351,87 @@ TODO:
                     _animateTabTo('l', $lis.last(), indexLastTab, e);
                     return false;
                 });
+
+
+                //Handle mouse wheel
+                if (typeof $ul.mousewheel !== 'undefined' && $ul.mousewheel(function(e) {
+                    if (e.deltaY > 0) { // wheel up : go left
+                        _previousTab(e);
+                    } else { // wheel down : go right
+                        _nextTab(e);
+                    }
+                }));
+            }
+
+            function _nextTab(e) {
+                var $nxtLi = $();
+                //First check if user do not want to select tab on Next than we have to find the first hidden (out of viewport) one
+                if (!o.selectTabAfterScroll) {
+                    $lis.each(function () {
+                        if (_isHiddenOn('n', $(this))) {
+                            $nxtLi = $(this);
+                            return false;
+                        }
+                    });
+                }
+                else {
+                    $nxtLi = $curSelectedTab.next('li');
+                }
+
+                //check if there is no next tab
+                if (!$nxtLi.length) {
+                    return false;
+                }
+
+                //check if li next to selected is in view or not
+                var isTabHidden = _isHiddenOn('n', $nxtLi);
+
+                //get index of next element
+                indexNextTab = $lis.index($nxtLi);
+
+                if (isTabHidden) {
+                    _animateTabTo('n', $nxtLi, indexNextTab, e);
+                }
+                else {
+                    $tabs.tabs('select', indexNextTab);
+                }
+            }
+
+            function _previousTab(e) {
+                var $prvLi = $();
+
+                //First check if user do not want to select tab on Prev than we have to find the prev hidden (out of viewport) tab so we can scroll to it
+                if (!o.selectTabAfterScroll) {
+                    //Reverse the order of tabs list
+                    $($lis.get().reverse()).each(function () {
+                        if (_isHiddenOn('p', $(this))) {
+                            $prvLi = $(this);
+                            return false;
+                        }
+                    });
+                }
+                else {
+                    $prvLi = $curSelectedTab.prev('li');
+                }
+                //return;
+
+                if (!$prvLi.length) {
+                    return false;
+                }
+
+                //check if li previous to selected is in view or not
+                var isTabHidden = _isHiddenOn('p', $prvLi);
+
+                //Get index of prev element
+                var indexPrevTab = $lis.index($prvLi);
+
+                if (isTabHidden) {
+                    _animateTabTo('p', $prvLi, indexPrevTab, e);
+                }
+                else {
+                    $tabs.tabs('select', indexPrevTab);
+                }
+                return false;
             }
 
             function _updateCurrentTab($li) {
@@ -532,10 +550,10 @@ TODO:
 /*try{
     jQuery._old_tabify = jQuery.ui.tabs.prototype._tabify;
     jQuery.ui.tabs.prototype._tabify = function (init)
-	{
+    {
         $._old_tabify.apply(this,[init]);
         if(this.options.scrollable)
-		{
+        {
             this.element.scrollabletabs(this.options.scrollable);
         }
     }
