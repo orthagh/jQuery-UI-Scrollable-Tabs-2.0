@@ -59,7 +59,7 @@ TODO:
         'selectTabAfterScroll': true,
         'showFirstLastArrows': false,
         'hideDefaultArrows': false ,
-        'nextPrevOutward': false,
+        'nextPrevOutward': true,
         'showListOfTabs': true,
         'tabsSeparation': 0, // Separation of the tabs in pixels
         'wrapperCssClass': ''
@@ -80,16 +80,16 @@ TODO:
 
             //Navigation
             if (!o.hideDefaultArrows) {
-                var $navPrev  = $('<li class="stNavPrevArrow ui-state-active" title="Previous"><span class="ui-icon ' + o.navPrevIconClass + '">Previous tab</span></li>'),
-                    $navNext  = $('<li class="stNavNextArrow ui-state-active" title="Next"><span class="ui-icon ' + o.navNextIconClass + '">Next tab</span></li>'),
-                    $navFirst = o.showFirstLastArrows ? $('<li class="stNavFirstArrow ui-state-active" title="First"><span class="ui-icon ' + o.navFirstIconClass + '">First tab</span></li>') : $(),
-                    $navLast  = o.showFirstLastArrows ? $('<li class="stNavLastArrow ui-state-active" title="Last"><span class="ui-icon ' + o.navLastIconClass + '">Last tab</span></li>') : $();
-                    $navListOfTabs  = o.showListOfTabs ? $('<li class="stNavListOfTabs ui-state-active" title="List"><span class="ui-icon ' + o.navListOfTabsIconClass + '">List tabs</span></li>') : $();
+                var $navPrev  = $('<li class="stNavPrevArrow ui-state-default" title="Previous"><span class="ui-icon ' + o.navPrevIconClass + '">Previous tab</span></li>'),
+                    $navNext  = $('<li class="stNavNextArrow ui-state-default" title="Next"><span class="ui-icon ' + o.navNextIconClass + '">Next tab</span></li>'),
+                    $navFirst = o.showFirstLastArrows ? $('<li class="stNavFirstArrow ui-state-default" title="First"><span class="ui-icon ' + o.navFirstIconClass + '">First tab</span></li>') : $(),
+                    $navLast  = o.showFirstLastArrows ? $('<li class="stNavLastArrow ui-state-default" title="Last"><span class="ui-icon ' + o.navLastIconClass + '">Last tab</span></li>') : $();
+                    $navListOfTabs  = o.showListOfTabs ? $('<li class="stNavListOfTabs ui-state-default" title="List"><span class="ui-icon ' + o.navListOfTabsIconClass + '">List tabs</span></li>') : $();
 
                 //Append elements to the container
                 $arrowsNav.append($navPrev, $navFirst, $navLast, $navNext, $navListOfTabs);
                 var $navLis = $arrowsNav.find('li').hover(function () { 
-                    $(this).toggleClass('ui-state-active').toggleClass('ui-state-hover'); 
+                    $(this).toggleClass('ui-state-hover'); 
                 });
             }
 
@@ -115,7 +115,7 @@ TODO:
                         $navNext.addClass('ui-corner-right');
                         $navFirst.css('margin-left', li_outerWidth);
                         $navLast.css('margin-right', li_outerWidth);
-                        $navListOfTabs.css('margin-right', li_outerWidth * 2);
+                        o.showFirstLastArrows ? $navListOfTabs.css('margin-right', li_outerWidth * 2) : $navListOfTabs.css('margin-right', li_outerWidth);
                     }
                     else {
                         $navFirst.addClass('ui-corner-left');

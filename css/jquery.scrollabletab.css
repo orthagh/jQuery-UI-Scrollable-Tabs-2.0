@@ -10,6 +10,7 @@
 {
     position: relative;
     overflow: hidden;
+    padding-right: 50px;
 }
 
     .stMainWrapper ul.ui-tabs-nav li
