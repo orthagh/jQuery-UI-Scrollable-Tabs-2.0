@@ -40,14 +40,15 @@ TODO:
         'customNavPrev': null,
         'customNavFirst': null,
         'customNavLast': null,
-        'closable': true, //Make tabs closable
+        'closable': false, //Make tabs closable
         'easing': '',
         'easing': 'swing', //The easing equation
         'loadLastTab': false, //When tabs loaded, scroll to the last tab - default is the first tab
-        'navFirstIconClass': 'ui-icon-seek-first',
-        'navLastIconClass': 'ui-icon-seek-end',
-        'navNextIconClass': 'ui-icon-seek-next',
-        'navPrevIconClass': 'ui-icon-seek-prev',
+        'navFirstIconClass': 'ui-icon-arrowthickstop-1-w',
+        'navLastIconClass': 'ui-icon-arrowthickstop-1-e',
+        'navNextIconClass': 'ui-icon-arrowthick-1-e',
+        'navPrevIconClass': 'ui-icon-arrowthick-1-w',
+        'navListOfTabsIconClass': 'ui-icon-carat-1-s',
         'onTabScroll': function () { },
         'resizable': false, //Alow resizing the tabs container
         'resizeHandles': 'e,s,se', //Resizable in North, East and NorthEast directions
@@ -56,34 +57,40 @@ TODO:
         'scrollSpeed': 500, //The speed in which the tabs will animate/scroll
         'selectTabOnAdd': true,
         'selectTabAfterScroll': true,
-        'showFirstLastArrows': true,
-        'hideDefaultArrows': false,
+        'showFirstLastArrows': false,
+        'hideDefaultArrows': false ,
         'nextPrevOutward': false,
+        'showListOfTabs': true,
         'tabsSeparation': 0, // Separation of the tabs in pixels
         'wrapperCssClass': ''
     }
 
     $.fn.scrollabletabs = function (options) {
         return this.each(function () {
-            var o = $.extend({}, settings, typeof options == 'object' ? options : {}),
-                $tabs = $(this).addClass(o.wrapperCssClass + ' stMainWrapper'),
-                $ul = $tabs.find('ul.ui-tabs-nav:first'),
-                $lis = $ul.find('li'),
-                $arrowsNav = $('<ol class="stNavMain" />'),
+            var o                  = $.extend({}, settings, typeof options == 'object' ? options : {}),
+                $tabs              = $(this).addClass(o.wrapperCssClass + ' stMainWrapper'),
+                $ul                = $tabs.find('ul.ui-tabs-nav:first'),
+                $lis               = $ul.find('li'),
+                $arrowsNav         = $('<ol class="stNavMain" />'),
                 
                 // supports both depreceated and new classes for jquery ui tabs
-                $curSelectedTab = $ul.find('.ui-tabs-selected,.ui-tabs-active').first().addClass('stCurrentTab'), //We will use our own css class to detect a selected tab because we might want to scroll without tab being selected
+                $curSelectedTab    = $ul.find('.ui-tabs-selected,.ui-tabs-active')
+                                        .first().addClass('stCurrentTab'), //We will use our own css class to detect a selected tab because we might want to scroll without tab being selected
                 $responsiveTimeout = undefined;
 
             //Navigation
             if (!o.hideDefaultArrows) {
-                var $navPrev = $('<li class="stNavPrevArrow ui-state-active" title="Previous"><span class="ui-icon ' + o.navPrevIconClass + '">Previous tab</span></li>'),
-                $navNext = $('<li class="stNavNextArrow ui-state-active" title="Next"><span class="ui-icon ' + o.navNextIconClass + '">Next tab</span></li>'),
-                $navFirst = o.showFirstLastArrows ? $('<li class="stNavFirstArrow ui-state-active" title="First"><span class="ui-icon ' + o.navFirstIconClass + '">First tab</span></li>') : $(),
-                $navLast = o.showFirstLastArrows ? $('<li class="stNavLastArrow ui-state-active" title="Last"><span class="ui-icon ' + o.navEndIconClass + '">Last tab</span></li>') : $();
+                var $navPrev  = $('<li class="stNavPrevArrow ui-state-active" title="Previous"><span class="ui-icon ' + o.navPrevIconClass + '">Previous tab</span></li>'),
+                    $navNext  = $('<li class="stNavNextArrow ui-state-active" title="Next"><span class="ui-icon ' + o.navNextIconClass + '">Next tab</span></li>'),
+                    $navFirst = o.showFirstLastArrows ? $('<li class="stNavFirstArrow ui-state-active" title="First"><span class="ui-icon ' + o.navFirstIconClass + '">First tab</span></li>') : $(),
+                    $navLast  = o.showFirstLastArrows ? $('<li class="stNavLastArrow ui-state-active" title="Last"><span class="ui-icon ' + o.navLastIconClass + '">Last tab</span></li>') : $();
+                    $navListOfTabs  = o.showListOfTabs ? $('<li class="stNavListOfTabs ui-state-active" title="List"><span class="ui-icon ' + o.navListOfTabsIconClass + '">List tabs</span></li>') : $();
+
                 //Append elements to the container
-                $arrowsNav.append($navPrev, $navFirst, $navLast, $navNext);
-                var $navLis = $arrowsNav.find('li').hover(function () { $(this).toggleClass('ui-state-active').toggleClass('ui-state-hover'); });
+                $arrowsNav.append($navPrev, $navFirst, $navLast, $navNext, $navListOfTabs);
+                var $navLis = $arrowsNav.find('li').hover(function () { 
+                    $(this).toggleClass('ui-state-active').toggleClass('ui-state-hover'); 
+                });
             }
 
             function _init() {
@@ -95,6 +102,8 @@ TODO:
 
                 //Adjust arrow position
                 if ($navLis) {
+                    var li_outerWidth = $arrowsNav.find('li:first').outerWidth();
+
                     $navLis.css({
                         'top': '-' + $ul.innerHeight() + 'px',
                         'height': $ul.innerHeight()
@@ -104,15 +113,27 @@ TODO:
                     if (o.nextPrevOutward) {
                         $navPrev.addClass('ui-corner-left');
                         $navNext.addClass('ui-corner-right');
-                        $navFirst.css('margin-left', $arrowsNav.find('li:first').outerWidth());
-                        $navLast.css('margin-right', $arrowsNav.find('li:first').outerWidth());
+                        $navFirst.css('margin-left', li_outerWidth);
+                        $navLast.css('margin-right', li_outerWidth);
+                        $navListOfTabs.css('margin-right', li_outerWidth * 2);
                     }
                     else {
                         $navFirst.addClass('ui-corner-left');
-                        $navLast.addClass('ui-corner-right');
+                        $navListOfTabs.addClass('ui-corner-right');
+
                         //If we have first and last arrows to show than move the arrows inward otherwise add the css classes to make their corners round.
-                        o.showFirstLastArrows ? $navPrev.css('margin-left', $arrowsNav.find('li:first').outerWidth()) : $navPrev.addClass('ui-corner-left');
-                        o.showFirstLastArrows ? $navNext.css('margin-right', $arrowsNav.find('li:first').outerWidth()) : $navNext.addClass('ui-corner-right');
+                        o.showFirstLastArrows ? $navPrev.css('margin-left', li_outerWidth) : $navPrev.addClass('ui-corner-left');
+                        o.showFirstLastArrows ? $navNext.css('margin-right', li_outerWidth) : $();
+
+                        if (o.showListOfTabs) {
+                            $navNext.css('margin-right', li_outerWidth);
+                            if (o.showFirstLastArrows) {
+                                $navNext.css('margin-right', li_outerWidth*2);
+                                $navLast.css('margin-right', li_outerWidth);
+                            }
+                        } else {
+                            o.showFirstLastArrows ? $navLast.addClass('ui-corner-right') : $navNext.addClass('ui-corner-right');
+                        }
                     }
                 }
                 //Add close buttons if required
@@ -123,6 +144,8 @@ TODO:
                 _adjustLeftPosition();
                 //Add events to the navigation buttons
                 _addNavEvents();
+                //Add list of tabs
+                _addListOfTabs();
                 //If tab is selected manually by user than also change the css class
                 $tabs.bind("tabsshow tabsactivate", function (event, ui) { // support for new and deprecated version
                     _updateCurrentTab(ui.tab ? $(ui.tab).parents('li') : ui.newTab); // support for new and deprecated version
@@ -218,6 +241,26 @@ TODO:
                     $arrowsNav.css('visibility', 'hidden').hide();
                     //And navigate the tabs to the first
                     _animateTabTo('f', $lis.first(), 0);
+                }
+            }
+
+            function _addListOfTabs() {
+                $listOfTabs = $();
+                if (o.showListOfTabs) {
+                    $listOfTabs = $('<ul class="ui-tabs-nav listTab ui-widget-header ui-corner-all"></ul>');
+
+                    $listOfTabs.appendTo($tabs);
+
+                    $tabs.find('.ui-tabs-nav li')
+                        .clone()
+                        .removeClass('ui-state-active')
+                        .find('a')
+                            .click(function() {
+                                $tabs.tabs('select', $(this).parent().index());
+                                $listOfTabs.toggle();
+                            })
+                        .end()
+                        .appendTo($listOfTabs);
                 }
             }
 
@@ -350,6 +393,14 @@ TODO:
                     var indexLastTab = $tabs.tabs('length') - 1;
                     _animateTabTo('l', $lis.last(), indexLastTab, e);
                     return false;
+                });
+
+
+                //Handle list of tabs
+                $navListOfTabs = $navListOfTabs ? $navListOfTabs : $();
+                $navListOfTabs = _addCustomerSelToCollection($navListOfTabs, 'List');
+                $navListOfTabs.click(function (e) {
+                    $listOfTabs.toggle();
                 });
 
 
