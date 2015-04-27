@@ -581,7 +581,7 @@ TODO:
                 });
 
                 // remove the last margin and border
-                w -= margin + 2 * parseInt(list.first().css('border-width'), 10);
+                w -= margin + 2 * parseInt(list.first().css('border-left-width'), 10);
 
                 var navWidth = $arrowsNav.css('visibility') == 'visible' ? _getNavPairWidth() : 0;
                 return w + navWidth;
