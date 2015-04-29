@@ -31,7 +31,6 @@ TODO:
    13. All feature request that are made on http://aamirafridi.com/jquery/jquery-scrollable-tabs comments
    14. Any cool-easy-to-implement features you can think of
 */
-
 (function ($) {
     var settings = {
         'animateTabs': false, // THIS CAN KILL IE6 WHEN THERE ARE MANY TABS :(  When tabs loaded and when user close the tab and the rest adjust its position
@@ -407,10 +406,14 @@ TODO:
 
                 //Handle mouse wheel
                 if (typeof $ul.mousewheel !== 'undefined' && $ul.mousewheel(function(e) {
-                    if (e.deltaY > 0) { // wheel up : go left
-                        _previousTab(e);
-                    } else { // wheel down : go right
-                        _nextTab(e);
+                    margin = parseFloat($lis.css('margin-left'));
+                    if (e.deltaY > 0 && margin < 0) { // wheel up : go left
+                        margin += 30;
+                        $lis.css('margin-left', margin + 'px');
+                    } 
+                    if (e.deltaY < 0 && ($ul.width() - margin) < _liWidth())  { // wheel down : go right
+                        margin -= 30;
+                        $lis.css('margin-left', margin + 'px');
                     }
                 }));
             }
