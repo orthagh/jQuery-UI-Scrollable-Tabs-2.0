@@ -406,6 +406,7 @@ TODO:
 
                 //Handle mouse wheel
                 if (typeof $ul.mousewheel !== 'undefined' && $ul.mousewheel(function(e) {
+                    e.preventDefault();
                     margin = parseFloat($lis.css('margin-left'));
                     if (e.deltaY > 0 && margin < 0) { // wheel up : go left
                         margin += 30;
