@@ -417,6 +417,31 @@ TODO:
                         $lis.css('margin-left', margin + 'px');
                     }
                 }));
+
+               // TOUCH SWIPE
+               var lastX;
+               var currentX;
+               var delta;
+
+               // detect touch event
+               $ul.bind('touchstart', function (e) {
+                   var currentX = e.originalEvent.touches[0].clientX;
+                   lastX = currentX;
+                   e.preventDefault();
+               });
+
+               // get movement and scroll the same way
+               $ul.bind('touchmove', function (e) {
+                   var currentX = e.originalEvent.touches[0].clientX;
+                   delta = currentX - lastX;
+                   margin = parseFloat($lis.css('margin-left')) + delta;
+                   if (margin < 0 && ($ul.width() - margin) < _liWidth()) {
+                     $lis.css('margin-left', margin + 'px');
+                   }
+
+                   lastX = currentX;
+                   e.preventDefault();
+               });
             }
 
             function _nextTab(e) {
